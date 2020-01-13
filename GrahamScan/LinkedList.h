@@ -58,6 +58,7 @@ class Linked_List
 	List_Node<T>* tail;
 	unsigned int size;
 public:
+	unsigned int GetSize() { return size; }
 	//public:
 	Linked_List()
 	{
