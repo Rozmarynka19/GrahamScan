@@ -5,10 +5,6 @@ class Point
 	double y;
 
 public:
-	Point(double a, double b)
-	{
-		x = a;
-		y = b;
-	}
+	Point(double a, double b);
 
 };
