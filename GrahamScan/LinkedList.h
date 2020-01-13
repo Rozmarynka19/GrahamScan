@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "Point.h"
 using namespace std;
 
 
@@ -21,6 +22,11 @@ public:
 		this->data = data;
 		this->next = NULL;
 		this->previous = NULL;
+	}
+
+	~List_Node()
+	{
+		delete data;
 	}
 
 	T PrintData()
@@ -416,6 +422,59 @@ public:
 		}
 		outcome = outcome + "\n\n";
 		return outcome;
+	}
+
+	void Load(string filename)
+	{
+		ifstream plik;
+
+		plik.open(filename);
+
+		if (plik.good())
+		{
+			string line;
+			int number;
+			double x, y;
+
+			plik >> line;
+			//cout << line << endl;
+			number = atoi(line.c_str());
+
+			for (int i = 0; i < number; i++)
+			{
+				plik >> line;
+				x = atof(line.c_str());
+				plik >> line;
+				y = atof(line.c_str());
+
+				//cout << x << "\t" << y;
+				//getchar();
+				addToHead(*(new Point(x, y)));
+			}
+			//cout << nodeArray->currentSize << endl;
+
+			if (!plik.eof()) {
+				cout << "I got sth else to read..." << endl;
+				cout << line << endl;
+			}
+
+			cout << "\nPoints have been loaded." << endl;
+			//cout<<nodeArray->getData(7);
+			//nodeArray->operator[](5).x;
+			//(*nodeArray)[5].x;
+		}
+		else
+		{
+			try
+			{
+				throw logic_error("Reading file failed!");
+			}
+			catch (logic_error & error)
+			{
+				cout << "Logic error: " << error.what() << " Make sure that the file exists." << endl;
+				terminate();
+			}
+		}
 	}
 
 };
