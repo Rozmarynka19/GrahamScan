@@ -478,6 +478,74 @@ public:
 		}
 	}
 
+	void prepareFiles(fstream& pointsFile, fstream& edgeFile)
+	{
+		/*ofstream file;
+		file.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\plik.txt", std::ios::out);
+		if (!file.good()) cerr << "file corrupted" << endl;*/
+		for (int i = 0; i < nodeArray->currentSize; i++)
+		{
+			nodeFile << "		" << i << " [pos=\"" << (*nodeArray)[i].x * 10 << "," << (*nodeArray)[i].y * 10 << "!\"]" << std::endl;
+		}
+		for (int i = 0; i < edgeArray->currentSize; i++)
+		{
+			/*file << " " << (*edgeArray)[i].firstIndex << " -- " << (*edgeArray)[i].secondIndex
+				<< " [label=" <<fixed<< (*edgeArray)[i].cost << "]" << endl;*/
+			edgeFile << " " << (*edgeArray)[i].firstIndex << " -- " << (*edgeArray)[i].secondIndex
+				<< " [label=\"" << (*edgeArray)[i].cost
+				//<<" taillabel="<< (*edgeArray)[i].firstIndex
+				//<<" headlabel="<< (*edgeArray)[i].secondIndex
+				<< "\"]" << endl;
+		}
+	}
+	void DrawGraph()
+	{
+		fstream points, edges, out;
+		string line = "", outName;
+		stringstream ss;
+
+		_mkdir("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph");
+		ss << "\"\"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe\" -Tpdf \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph\\out.dot\" -o \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph\\graph" << graphNumber << ".pdf\"";
+		//"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe" -Tpdf "C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot" -o "C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\graph.pdf"
+		outName = ss.str();
+		//cout << outName << endl;
+		points.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph\\nodes.txt", std::ios::out | std::ios::in | std::ios::trunc);
+		edges.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph\\edges.txt", std::ios::out | std::ios::in | std::ios::trunc);
+		out.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\GrahamScan\\graph\\out.dot", std::ios::out | std::ios::in | std::ios::trunc);
+
+		if (!points.good()) cerr << "Open nodes.txt failed!" << endl;
+		if (!edges.good()) cerr << "Open edges.txt failed!" << endl;
+		if (!out.good()) cerr << "Open out.dot failed!" << endl;
+
+		prepareFiles(points, edges);
+
+		out << "digraph D {" << std::endl;
+		out << "	{" << std::endl;
+		//out << "	 node [shape = circle, style=filled, fontsize=10]" << std::endl;
+		out << "	 node [shape = circle, style=filled, width=0.2, fixedsize=true, fontsize=10]" << std::endl;
+		//out << "	 node [shape = point]" << std::endl;
+
+		points.seekg(0, std::ios::beg);
+		while (getline(points, line)) {
+			out << line << std::endl;
+		}
+		out << "	}" << std::endl;
+		edges.seekg(0, std::ios::beg);
+		while (getline(edges, line)) {
+			out << line << std::endl;
+		}
+		points.close();
+		edges.close();
+		//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\nodes.txt");
+		//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\edges.txt");
+		out << "}" << std::endl;
+		out.close();
+		system(outName.c_str());
+		graphNumber++;
+
+		//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot");
+	}
+
 };
 
 //template <class T>
