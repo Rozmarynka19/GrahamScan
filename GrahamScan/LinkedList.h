@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "Point.h"
 using namespace std;
 
@@ -52,11 +53,11 @@ public:
 template <class T>
 class Linked_List
 {
-public:
+
 	List_Node<T>* head;
 	List_Node<T>* tail;
 	unsigned int size;
-
+public:
 	//public:
 	Linked_List()
 	{
