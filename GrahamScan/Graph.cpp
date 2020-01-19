@@ -24,10 +24,10 @@ Graph::~Graph()
 	delete Points;
 	delete VertexOfHull;
 }
-//unsigned int Graph::GetListOfPointsSize()
-//{
-//	return listOfPoints->GetSize();
-//}
+unsigned int Graph::GetNumberOfPoints()
+{
+	return Points->currentSize;
+}
 unsigned int Graph::GetNumberOfVertex()
 {
 	return VertexOfHull->GetSize();
@@ -67,12 +67,29 @@ void Graph::PrintVertex()
 		tmp = tmp->next;
 	}
 }
+string Graph::IndexOfVertexToString()
+{
+	string result = "";
+	List_Node<Point>* tmp = VertexOfHull->head;
+	//cout << "VertexOfHull's Size: " << VertexOfHull->GetSize() << endl;
+	/*cout << "Press ENTER to continue... " << endl;
+	getchar();*/
+	for (int i = 0; i < VertexOfHull->size; i++)
+	{
+		result = result+ "\n" + to_string(tmp->data.label);
+		tmp = tmp->next;
+	}
+
+	return result;
+}
 Point* Graph::GetStartPoint()
 {
 	return Points->FindStartPoint();
 }
 void Graph::Load(string filename)
 {
+	cout << "Loading graph...";
+
 	ifstream plik;
 
 	plik.open(filename);

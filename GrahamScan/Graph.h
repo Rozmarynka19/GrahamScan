@@ -18,10 +18,11 @@ public:
 	Graph();	
 	////Graph(const Graph* graph);
 	~Graph();
-	////unsigned int GetListOfPointsSize();
+	unsigned int GetNumberOfPoints();
 	unsigned int GetNumberOfVertex();
 	void Print();
 	void PrintVertex();
+	string IndexOfVertexToString();
 	Point* GetStartPoint();
 	void MakeCopyOfPoints(Dynamic_Array<Point>* PointsCopy, Point StartPoint);
 	void AddVertexToHull(Point vertex);

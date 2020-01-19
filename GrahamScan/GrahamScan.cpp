@@ -1,69 +1,59 @@
 #include <iostream>
+#include <time.h>
 #include "Graph.h"
 #include "Point.h"
 #include "DynamicArray.h"
 #include "HeapSort.h"
 using namespace std;
+clock_t GrahamStart, GrahamStop, SortStart, SortStop;
 
 void GrahamScan(Graph* graph, Dynamic_Array<Point>* PointsCopy)
 {
 	Point* StartPoint = graph->GetStartPoint();
-	//cout << StartPoint->label << ": " << StartPoint->x << "," << StartPoint->y << endl;
 
 	//copy of points without StartPoint
 	graph->MakeCopyOfPoints(PointsCopy, *StartPoint);
 
-	/*cout << "PointsCopy's Size: " << PointsCopy->currentSize << endl;
-	for (int i = 0; i < PointsCopy->currentSize; i++)
-	{
-		cout << PointsCopy->getData(i).label << ": " << PointsCopy->getData(i).x << ", " << PointsCopy->getData(i).y << endl;
-	}*/
-
-
 	PointsCopy->NewCoordinatesSystem(*StartPoint);
 
-	/*cout << "PointsCopy's Size: " << PointsCopy->currentSize << endl;
-	for (int i = 0; i < PointsCopy->currentSize; i++)
-	{
-		cout << PointsCopy->getData(i).label << ": " << PointsCopy->getData(i).x << ", " << PointsCopy->getData(i).y << endl;
-		getchar();
-	}*/
-
 	BinaryHeap<Point>* binaryHeap = new BinaryHeap<Point>(PointsCopy, true, false);
-	/*for (int i = 0; i < PointsCopy->currentSize; i++)
-	{
-		cout << PointsCopy->getData(i).label << ": " << PointsCopy->getData(i).x << ", " << PointsCopy->getData(i).y << " " << PointsCopy->getData(i).x / PointsCopy->getData(i).y << endl;
-		getchar();
-	}*/
-	//cout << "OK" << endl;
+
+	SortStart = clock();
 	binaryHeap->HeapSort();
+	SortStop = clock();
 	
-	cout << "PointsCopy's Size: " << PointsCopy->currentSize << endl;
-	/*for (int i = 0; i < PointsCopy->currentSize; i++)
-	{
-		cout << PointsCopy->getData(i).label << ": " << PointsCopy->getData(i).x << ", " << PointsCopy->getData(i).y << " " << PointsCopy->getData(i).x / PointsCopy->getData(i).y << endl;
-		getchar();
-	}*/
 	
-
-
-	cout << "Przed petla" << endl;
 	graph->AddVertexToHull(*StartPoint-*StartPoint);
 	graph->AddVertexToHull(PointsCopy->getData(0));
+
+	cout << "Main GrahamScan's loop starts..." << endl;
+	GrahamStart = clock();
 	for (int i = 1; i < PointsCopy->currentSize; i++)
 	{
 		graph->AddVertexToHull(PointsCopy->getData(i));
-		//dopoki zakret w prawo
+		//till right turn - remove second to last vertex
 			while (Compare(graph->GetVertex(graph->GetNumberOfVertex() - 1) - graph->GetVertex(graph->GetNumberOfVertex() - 2),
 				graph->GetVertex(graph->GetNumberOfVertex() - 2) - graph->GetVertex(graph->GetNumberOfVertex() - 3)) == -1)
 		{
 			graph->RemoveSecondToLastVertex();
 		}
 	}
+	GrahamStop = clock();
 	
 	delete binaryHeap;
 }
 
+void DrawSummary(Graph* graph)
+{
+	cout.precision(numeric_limits<double>::max_digits10);
+	cout << "\n============= SUMMARY =============" << endl;
+	cout <<"Number of points: "<<graph->GetNumberOfPoints()<<endl
+		<< "Number of vertex: "<< graph->GetNumberOfVertex()<<endl
+		<< "Indexes of vertices: " << graph->IndexOfVertexToString()<<endl
+		<< "Time of sorting[s]: " << (SortStop - SortStart) / (double)CLOCKS_PER_SEC << endl
+		<< "Time of main Graham's loop[s]: " << (GrahamStop - GrahamStart) / (double)CLOCKS_PER_SEC << endl
+		<< "===================================" << endl;
+}
 
 
 
@@ -76,47 +66,10 @@ int main()
 	//graph->Print();
 
 	GrahamScan(graph, PointsCopy);
-	graph->PrintVertex();
+	DrawSummary(graph);
+	//graph->PrintVertex();
 	//graph->DrawGraph();
 
 
-	cout << "Hello World!\n";
 	delete graph, PointsCopy;
-
-	//////////////////////////////////////////////////////////
-
-	//Dynamic_Array<int>* ar = new Dynamic_Array<int>();
-	//ar->addElement(10);
-	//ar->addElement(250);
-	//ar->addElement(2340);
-	//ar->addElement(530);
-	//ar->addElement(30);
-	//ar->addElement(53);
-	//ar->addElement(23);
-	//ar->addElement(64);
-	//ar->addElement(5);
-	//ar->addElement(56);
-
-	//for (int i = 0; i < ar->currentSize; i++)
-	//	cout << ar->getData(i) << endl;
-
-	//cout << endl;
-	//cout << endl;
-
-
-	//BinaryHeap<int>* bh = new BinaryHeap<int>(ar, false, false);
-	//
-
-	//for (int i = 0; i < ar->currentSize; i++)
-	//	cout << ar->getData(i) << endl;
-
-	//cout << endl;
-	//	cout << endl;
-
-	//bh->HeapSort();
-
-	//for (int i = 0; i < ar->currentSize; i++)
-	//	cout << ar->getData(i) << endl;
-
-	//delete ar, bh;
 }
